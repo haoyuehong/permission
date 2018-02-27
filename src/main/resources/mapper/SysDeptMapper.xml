@@ -170,4 +170,10 @@
       operator_ip = #{operatorIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!--获取全部部门-->
+  <select id="getAll" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_dept
+  </select>
 </mapper>
