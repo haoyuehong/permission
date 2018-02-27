@@ -1,60 +1,90 @@
 package com.hz1202.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lombok.Setter;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@Setter
-public class JsonData {
-    private boolean rest;
+@JsonInclude(Include.NON_NULL)
+public class JsonData<T> implements Serializable {
+
+    private int status;
     private String msg;
-    private Object data;
+    private T data;
 
-    public JsonData(boolean rest){
-        this.rest = rest;
+    private JsonData(int status) {
+        this.status = status;
     }
 
-    public static JsonData success(String msg, Object data){
-        JsonData jsonData = new JsonData(true);
-        jsonData.setMsg(msg);
-        jsonData.setData(data);
-        return jsonData;
+    private JsonData(String msg) {
+        this.msg = msg;
     }
 
-    public static JsonData success(Object data){
-        JsonData jsonData = new JsonData(true);
-        jsonData.setData(data);
-        return jsonData;
+    private JsonData(T data) {
+        this.data = data;
     }
 
-    public static JsonData success(String msg){
-        JsonData jsonData = new JsonData(true);
-        jsonData.setMsg(msg);
-        return jsonData;
+    private JsonData(int status, String msg) {
+        this.status = status;
+        this.msg = msg;
     }
 
-    public static JsonData success(){
-        JsonData jsonData = new JsonData(true);
-        return jsonData;
+    private JsonData(int status, T data) {
+        this.status = status;
+        this.data = data;
     }
 
-    public static JsonData error(String msg){
-        JsonData jsonData = new JsonData(false);
-        jsonData.setMsg(msg);
-        return jsonData;
+    private JsonData(int status, String msg, T data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public Map<String,Object> toMap(){
-        Map<String,Object> result = new HashMap<String, Object>();
-        result.put("rest",result);
-        result.put("msg",msg);
-        result.put("data",data);
+    //使之不在json返回结果当中
+    @JsonIgnore
+    public boolean isSuccess() {
+        return this.status == 1;
+    }
+
+    public static JsonData createSuccess() {
+        return new JsonData(1);
+    }
+
+    public static JsonData createSuccess(String msg) {
+        return new JsonData(1, msg);
+    }
+
+    public static <T> JsonData<T> createSuccess(T data) {
+        return new JsonData(1, data);
+    }
+
+    public static <T> JsonData<T> createSuccess(String msg, T data) {
+        return new JsonData(1, msg, data);
+    }
+
+    public static JsonData createError() {
+        return new JsonData(1);
+    }
+
+    public static JsonData createError(String msg) {
+        return new JsonData(0, msg);
+    }
+
+    public static JsonData createError(int status, String msg) {
+        return new JsonData(status, msg);
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        result.put("status", status);
+        result.put("msg", msg);
+        if(data != null){
+            result.put("data", data);
+        }
         return result;
     }
-
-
-
 }
