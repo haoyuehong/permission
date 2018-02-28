@@ -29,7 +29,7 @@ public class SysDeptController {
     @ResponseBody
     public JsonData saveDept(DeptParam deptParam){
         deptService.save(deptParam);
-        return JsonData.createError("添加成功");
+        return JsonData.createSuccess("添加成功");
     }
 
     @RequestMapping("/deptTree.json")
@@ -39,6 +39,13 @@ public class SysDeptController {
         return JsonData.createSuccess(deptLevelDtos);
     }
 
+
+    @RequestMapping("/update.json")
+    @ResponseBody
+    public JsonData updateDept(DeptParam deptParam){
+        deptService.update(deptParam);
+        return JsonData.createError("更新成功");
+    }
 
 
 }

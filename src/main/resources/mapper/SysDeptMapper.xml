@@ -176,4 +176,35 @@
     <include refid="Base_Column_List" />
     FROM sys_dept
   </select>
+
+  <!--根据level获取子部门-->
+  <select id="getChildDeptListByLevel" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_dept
+    WHERE levle LIKE #{level} || ".%"
+  </select>
+
+
+
+  <update id="bachUpdateDept" parameterType="com.hz1202.model.SysDept">
+    <foreach collection="deptList" item="item" separator=",">
+        update sys_dept
+        SET levle = #{item.levle}
+        WHERE id = #{item.id}
+    </foreach>
+  </update>
+
+    <select id="countByNameAndParentId" parameterType="map" resultType="int">
+        SELECT count(1)
+        FROM sys_dept
+        WHERE name = #{name}
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="id != null">
+            AND id != #{id}
+        </if>
+    </select>
+
 </mapper>

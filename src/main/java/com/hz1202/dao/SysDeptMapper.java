@@ -1,6 +1,7 @@
 package com.hz1202.dao;
 
 import com.hz1202.model.SysDept;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -57,4 +58,18 @@ public interface SysDeptMapper {
      * 获取全部部门
      */
     List<SysDept> getAll();
+
+    /**
+     * 根据level获取下级部门
+     */
+    List<SysDept> getChildDeptListByLevel(@Param("level")String level);
+
+    /**
+     * 批量更新部门
+     */
+    void bachUpdateDept(@Param("deptList") List<SysDept> deptList);
+    /**
+     * 查询数据是否存在
+     */
+    int countByNameAndParentId(@Param("parentId")Integer parentId,@Param("name") String name, @Param("id")Integer id);
 }
